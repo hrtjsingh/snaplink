@@ -1,26 +1,260 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.75rem;
+  --snap-bg: #030712;
+  --snap-bg-elevated: #0a0f1e;
+  --snap-cyan: #22d3ee;
+  --snap-violet: #8b5cf6;
+  --snap-rose: #f472b6;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 3, 7, 18;
+  --background-end-rgb: 10, 15, 30;
+  --background: oklch(0.12 0.02 265);
+  --foreground: oklch(0.97 0.01 265);
+  --card: oklch(0.16 0.025 265);
+  --card-foreground: oklch(0.97 0.01 265);
+  --popover: oklch(0.16 0.025 265);
+  --popover-foreground: oklch(0.97 0.01 265);
+  --primary: oklch(0.78 0.14 195);
+  --primary-foreground: oklch(0.12 0.02 265);
+  --secondary: oklch(0.22 0.03 265);
+  --secondary-foreground: oklch(0.92 0.02 265);
+  --muted: oklch(0.22 0.025 265);
+  --muted-foreground: oklch(0.65 0.03 265);
+  --accent: oklch(0.62 0.2 285);
+  --accent-foreground: oklch(0.97 0.01 265);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.78 0.14 195);
+  --chart-1: oklch(0.78 0.14 195);
+  --chart-2: oklch(0.62 0.2 285);
+  --chart-3: oklch(0.72 0.17 330);
+  --chart-4: oklch(0.7 0.15 160);
+  --chart-5: oklch(0.75 0.12 80);
 }
 
 @theme inline {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --animate-fade-in-up: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.6s ease both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+  --animate-orb-drift: orb-drift 20s ease-in-out infinite;
+  --animate-orb-drift-reverse: orb-drift-reverse 25s ease-in-out infinite;
+  --animate-scale-in: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(1deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes orb-drift-reverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-35px, 25px) scale(1.1); }
+  66% { transform: translate(25px, -30px) scale(0.92); }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes grid-fade {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+.code-editor {
+  font-family: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .snap-gradient-text {
+    @apply bg-gradient-to-r from-cyan-400 via-violet-400 to-rose-400 bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: shimmer 4s linear infinite;
+  }
+
+  .snap-gradient-text-static {
+    @apply bg-gradient-to-r from-cyan-400 via-violet-400 to-rose-400 bg-clip-text text-transparent;
+  }
+
+  .snap-card {
+    @apply rounded-2xl border border-white/8 bg-white/3 backdrop-blur-xl;
+    box-shadow:
+      0 0 0 1px oklch(1 0 0 / 4%) inset,
+      0 8px 32px oklch(0 0 0 / 25%);
+  }
+
+  .snap-card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .snap-card-hover:hover {
+    @apply border-cyan-500/25 -translate-y-1;
+    box-shadow:
+      0 0 0 1px oklch(0.78 0.14 195 / 15%) inset,
+      0 12px 40px oklch(0.78 0.14 195 / 12%),
+      0 8px 32px oklch(0 0 0 / 30%);
+  }
+
+  .snap-badge {
+    @apply rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300;
+  }
+
+  .snap-nav-link {
+    @apply text-zinc-400 transition-colors duration-200 hover:text-white;
+  }
+
+  .snap-input {
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-zinc-500 backdrop-blur-sm transition-all duration-200;
+  }
+
+  .snap-input:focus {
+    @apply border-cyan-500/50 outline-none ring-2 ring-cyan-500/20;
+  }
+
+  .snap-glow {
+    @apply pointer-events-none absolute inset-0 -z-10 rounded-3xl opacity-60 blur-3xl;
+    background: linear-gradient(135deg, oklch(0.78 0.14 195 / 25%), oklch(0.62 0.2 285 / 25%));
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  .snap-orb {
+    @apply pointer-events-none absolute rounded-full blur-3xl;
+    animation: var(--animate-orb-drift);
+  }
+
+  .snap-orb-1 {
+    top: -10%;
+    left: -5%;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, oklch(0.78 0.14 195 / 30%) 0%, transparent 70%);
+  }
+
+  .snap-orb-2 {
+    top: 30%;
+    right: -10%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, oklch(0.62 0.2 285 / 25%) 0%, transparent 70%);
+    animation: var(--animate-orb-drift-reverse);
+  }
+
+  .snap-orb-3 {
+    bottom: -15%;
+    left: 25%;
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(circle, oklch(0.72 0.17 330 / 20%) 0%, transparent 70%);
+    animation: var(--animate-orb-drift);
+    animation-duration: 28s;
+  }
+
+  .snap-grid {
+    @apply pointer-events-none absolute inset-0;
+    background-image:
+      linear-gradient(oklch(1 0 0 / 3%) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(1 0 0 / 3%) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 70%);
+    animation: grid-fade 8s ease-in-out infinite;
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
 }
