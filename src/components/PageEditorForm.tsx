@@ -35,6 +35,7 @@ interface PageEditorFormProps {
   mode: 'create' | 'edit'
   slug?: string
   initialData?: PageFormValues
+  appUrl: string
 }
 
 const modeOptions = [
@@ -65,6 +66,7 @@ export default function PageEditorForm({
   mode,
   slug,
   initialData,
+  appUrl,
 }: PageEditorFormProps) {
   const router = useRouter()
   const isEdit = mode === 'edit'
@@ -88,7 +90,6 @@ export default function PageEditorForm({
   const [js, setJs] = useState(initialData?.js ?? '')
   const [isLoading, setIsLoading] = useState(false)
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   const previewSlug =
     isEdit && slug
       ? slug

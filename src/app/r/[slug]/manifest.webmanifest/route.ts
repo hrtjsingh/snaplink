@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
+import { getOriginFromRequest } from '@/lib/base-url'
 import { connectDB } from '@/lib/mongodb'
 import { buildManifest, isPwaInstallable } from '@/lib/pwa'
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
@@ -14,7 +15,13 @@ export async function GET(
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  const manifest = buildManifest(slug, page.title, page.description ?? '')
+  const origin = getOriginFromRequest(request)
+  const manifest = buildManifest(
+    slug,
+    page.title,
+    page.description ?? '',
+    origin
+  )
 
   return NextResponse.json(manifest, {
     headers: {

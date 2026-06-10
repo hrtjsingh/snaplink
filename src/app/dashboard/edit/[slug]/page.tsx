@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server'
 import { notFound } from 'next/navigation'
 import { connectDB } from '@/lib/mongodb'
 import PageEditorForm from '@/components/PageEditorForm'
+import { getServerOrigin } from '@/lib/base-url'
 import { normalizePageCode, type PageFormValues } from '@/lib/page-code'
 
 async function getPageForEdit(
@@ -39,11 +40,19 @@ export default async function EditPagePage({
   if (!userId) return null
 
   const { slug } = await params
-  const initialData = await getPageForEdit(slug, userId)
+  const [initialData, appUrl] = await Promise.all([
+    getPageForEdit(slug, userId),
+    getServerOrigin(),
+  ])
 
   if (!initialData) notFound()
 
   return (
-    <PageEditorForm mode="edit" slug={slug} initialData={initialData} />
+    <PageEditorForm
+      mode="edit"
+      slug={slug}
+      initialData={initialData}
+      appUrl={appUrl}
+    />
   )
 }

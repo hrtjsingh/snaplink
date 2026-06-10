@@ -10,6 +10,7 @@ import {
   formatGrowth,
   getUserAnalytics,
 } from '@/lib/analytics'
+import { getServerOrigin } from '@/lib/base-url'
 import {
   Plus,
   Globe,
@@ -34,7 +35,7 @@ export default async function DashboardPage() {
   if (!userId) return null
 
   const analytics = await getUserAnalytics(userId)
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const appUrl = await getServerOrigin()
 
   return (
     <div className="text-white">

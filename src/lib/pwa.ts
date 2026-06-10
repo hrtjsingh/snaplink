@@ -1,7 +1,3 @@
-export function getAppOrigin(): string {
-  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-}
-
 export function pagePath(slug: string): string {
   return `/r/${slug}`
 }
@@ -16,9 +12,9 @@ export function isPwaInstallable(
 export function buildManifest(
   slug: string,
   title: string,
-  description: string
+  description: string,
+  origin: string
 ) {
-  const origin = getAppOrigin()
   const startUrl = `${origin}${pagePath(slug)}`
   const iconUrl = `${origin}${pagePath(slug)}/icon`
 
