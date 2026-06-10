@@ -1,31 +1,28 @@
-'use client';
-import { useEffect, useState } from "react";
+'use client'
+
+import { useEffect, useState } from 'react'
+
+const LAUNCH_TIME = new Date('2026-11-01T00:00:00').getTime()
+
+function getTimeLeft() {
+  const difference = LAUNCH_TIME - Date.now()
+  if (difference <= 0) return null
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / (1000 * 60)) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  }
+}
 
 export default function ComingSoon() {
-  const launchDate = new Date("2026-11-01T00:00:00");
-
-  const calculateTimeLeft = () => {
-    const difference = launchDate - new Date();
-    if (difference <= 0) return null;
-
-    return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / (1000 * 60)) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  };
-
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  const [email, setEmail] = useState("");
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+    const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <div className="flex mt-28 items-center justify-center bg-transparent animate-fade-in-up">
@@ -46,7 +43,7 @@ export default function ComingSoon() {
                 className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-md animate-scale-in"
               >
                 <div className="text-3xl font-semibold">
-                  {String(value).padStart(2, "0")}
+                  {String(value).padStart(2, '0')}
                 </div>
                 <div className="text-xs uppercase tracking-wide opacity-80">
                   {label}
@@ -55,16 +52,13 @@ export default function ComingSoon() {
             ))}
           </div>
         ) : (
-          <p className="mb-8 text-xl font-semibold">
-            🎉 We are live!
-          </p>
+          <p className="mb-8 text-xl font-semibold">🎉 We are live!</p>
         )}
 
-   
         <p className="mt-6 text-sm opacity-70">
           © {new Date().getFullYear()} Snaplink. All rights reserved.
         </p>
       </div>
     </div>
-  );
+  )
 }

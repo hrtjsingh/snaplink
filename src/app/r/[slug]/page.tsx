@@ -1,6 +1,6 @@
 import { connectDB } from '@/lib/mongodb'
 import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { PageData } from '@/lib/types'
 import { isPwaInstallable, pagePath } from '@/lib/pwa'
 import ClientRenderer from '@/components/ClientRenderer'
@@ -46,7 +46,6 @@ export async function generateMetadata({
   return {
     title: page.title,
     description: page.description || undefined,
-    themeColor: pwa ? '#06b6d4' : undefined,
     manifest: pwa ? `${pagePath(slug)}/manifest.webmanifest` : undefined,
     appleWebApp: pwa
       ? {
@@ -67,6 +66,21 @@ export async function generateMetadata({
         }
       : undefined,
   }
+}
+
+export async function generateViewport({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Viewport> {
+  const { slug } = await params
+  const page = await getPageData(slug)
+
+  if (!page) return {}
+
+  const pwa = isPwaInstallable(page.visibility, page.pwaEnabled)
+
+  return pwa ? { themeColor: '#06b6d4' } : {}
 }
 
 export default async function RenderPage({

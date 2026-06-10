@@ -6,11 +6,12 @@ import { normalizePageCode } from '@/lib/page-code'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params
     const db = await connectDB()
-    const page = await db.collection('pages').findOne({ slug: params.slug })
+    const page = await db.collection('pages').findOne({ slug })
 
     if (!page || page.visibility === 'private') {
       return new NextResponse('Page not found', { 
@@ -21,7 +22,7 @@ export async function GET(
       })
     }
 
-    await recordPageView(params.slug, request.headers.get('referer') ?? undefined)
+    await recordPageView(slug, request.headers.get('referer') ?? undefined)
 
     const { html, css, js } = normalizePageCode(
       page.html,
