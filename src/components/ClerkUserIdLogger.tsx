@@ -8,7 +8,6 @@ export function ClerkUserIdLogger() {
 
   useEffect(() => {
     if (!isLoaded || !userId) return
-    console.log('[Snaplink] Clerk user ID:', userId)
   }, [isLoaded, userId])
 
   return null
