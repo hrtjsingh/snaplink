@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
   SignInButton,
@@ -19,6 +19,15 @@ type SiteHeaderProps = {
 export function SiteHeader({ variant }: SiteHeaderProps) {
   const [open, setOpen] = useState(false)
   const close = () => setOpen(false)
+
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
 
   const desktopLinks =
     variant === 'marketing' ? (
@@ -86,8 +95,8 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
     )
 
   return (
-    <header className="container mx-auto px-4 py-4 sm:py-6 relative animate-fade-in">
-      <nav className="flex justify-between items-center rounded-2xl border border-white/8 bg-white/3 px-4 sm:px-6 py-3 sm:py-4 backdrop-blur-xl">
+    <header className="container relative z-50 mx-auto px-4 py-4 sm:py-6 animate-fade-in">
+      <nav className="relative z-50 flex justify-between items-center rounded-2xl border border-white/8 bg-white/3 px-4 sm:px-6 py-3 sm:py-4 backdrop-blur-xl">
         <div className="text-xl sm:text-2xl font-bold snap-gradient-text-static min-w-0">
           <Link href="/">Snaplink</Link>
         </div>
@@ -135,9 +144,19 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
       </nav>
 
       {open && (
-        <div className="md:hidden mt-2 rounded-2xl border border-white/8 bg-white/3 backdrop-blur-xl px-4 py-4 animate-fade-in-up">
-          <div className="flex flex-col gap-3">{mobileLinks}</div>
-        </div>
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+            onClick={close}
+          />
+          <div className="absolute inset-x-0 top-full z-50 mt-2 md:hidden">
+            <div className="rounded-2xl border border-white/8 bg-[var(--snap-bg-elevated)]/95 px-4 py-4 shadow-2xl shadow-black/40 backdrop-blur-xl animate-fade-in-up">
+              <div className="flex flex-col gap-3">{mobileLinks}</div>
+            </div>
+          </div>
+        </>
       )}
     </header>
   )

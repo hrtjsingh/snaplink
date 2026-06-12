@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb'
 import { recordPageView } from '@/lib/analytics'
 import { externalLinkHandlerScript } from '@/lib/external-links'
 import { normalizePageCode } from '@/lib/page-code'
+import { injectSnaplinkFooter } from '@/lib/snaplink-branding'
 
 export async function GET(
   request: NextRequest,
@@ -30,7 +31,7 @@ export async function GET(
       page.js ?? ''
     )
 
-    const assembledHTML = `<!DOCTYPE html>
+    const assembledHTML = injectSnaplinkFooter(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -43,7 +44,7 @@ export async function GET(
 ${html}
 ${js ? `<script>\n${js}\n</script>\n` : ''}<script>${externalLinkHandlerScript}</script>
 </body>
-</html>`
+</html>`)
 
     return new NextResponse(assembledHTML, {
       headers: {

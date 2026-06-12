@@ -1,37 +1,40 @@
 "use client"
 
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { patchExternalLinks } from "@/lib/external-links"
 import { normalizePageCode } from "@/lib/page-code"
+import {
+  SNAPLINK_FOOTER_ATTR,
+  extractBodyBlock,
+  getThemeFromCss,
+  readThemeFromElement,
+  themeToStyle,
+  type PageTheme,
+} from "@/lib/snaplink-branding"
+import { SnaplinkPageFooter } from "@/components/SnaplinkPageFooter"
 import type { PageData } from "@/lib/types"
 
-function extractBodyCSS(css: string) {
-  if (!css) return { bodyStyle: "", restCSS: "" }
-
-  let bodyStyle = ""
-  let restCSS = css
-
-  const bodyRegex = /body\s*\{([\s\S]*?)\}/gi
-
-  restCSS = restCSS.replace(bodyRegex, (_, styles) => {
-    bodyStyle += styles
-    return ""
-  })
-
-  return { bodyStyle, restCSS }
+function mergeTheme(base: PageTheme, override: PageTheme): PageTheme {
+  return {
+    background: override.background || base.background,
+    color: override.color || base.color,
+  }
 }
 
 export default function ClientRenderer({ page }: { page: PageData }) {
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const scriptRef = useRef<HTMLScriptElement | null>(null)
+  const [resolvedTheme, setResolvedTheme] = useState<PageTheme>({})
 
   const { html, css, js } = useMemo(
     () => normalizePageCode(page.html || "", page.css || "", page.js || ""),
     [page.html, page.css, page.js]
   )
 
-  const { bodyStyle, restCSS } = useMemo(() => extractBodyCSS(css), [css])
+  const cssTheme = useMemo(() => getThemeFromCss(css), [css])
+  const { bodyStyle, restCSS } = useMemo(() => extractBodyBlock(css), [css])
 
   const contentHtml = useMemo(
     () => `
@@ -42,6 +45,19 @@ export default function ClientRenderer({ page }: { page: PageData }) {
     `,
     [html, restCSS, bodyStyle]
   )
+
+  useLayoutEffect(() => {
+    const wrapper = wrapperRef.current
+    const main = contentRef.current?.querySelector(".main-parent") as HTMLElement | null
+    if (!wrapper || !main) return
+
+    const sampled = readThemeFromElement(main)
+    const next = mergeTheme(cssTheme, sampled)
+    setResolvedTheme(next)
+
+    wrapper.style.background = next.background || sampled.background || ""
+    wrapper.style.color = next.color || sampled.color || ""
+  }, [contentHtml, cssTheme])
 
   useLayoutEffect(() => {
     scriptRef.current?.remove()
@@ -65,32 +81,64 @@ export default function ClientRenderer({ page }: { page: PageData }) {
     }
   }, [js, html])
 
-  // Catch links added dynamically after user scripts run
+  useEffect(() => {
+    const wrapper = wrapperRef.current
+    const main = contentRef.current?.querySelector(".main-parent") as HTMLElement | null
+    if (!wrapper || !main) return
+
+    const syncTheme = () => {
+      const sampled = readThemeFromElement(main)
+      const next = mergeTheme(cssTheme, sampled)
+      setResolvedTheme(next)
+      wrapper.style.background = next.background || sampled.background || ""
+      wrapper.style.color = next.color || sampled.color || ""
+    }
+
+    syncTheme()
+
+    const observer = new MutationObserver(syncTheme)
+    observer.observe(main, {
+      attributes: true,
+      attributeFilter: ["style", "class"],
+      subtree: true,
+    })
+
+    return () => observer.disconnect()
+  }, [contentHtml, cssTheme])
+
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
 
     const handleClick = (event: MouseEvent) => {
-      const anchor = (event.target as HTMLElement).closest('a')
+      const anchor = (event.target as HTMLElement).closest("a")
       if (!anchor || !root.contains(anchor)) return
+      if (anchor.closest(`[${SNAPLINK_FOOTER_ATTR}]`)) return
 
-      const href = anchor.getAttribute('href')?.trim()
-      if (!href || href === '#' || href.startsWith('#') || href.startsWith('javascript:')) {
+      const href = anchor.getAttribute("href")?.trim()
+      if (!href || href === "#" || href.startsWith("#") || href.startsWith("javascript:")) {
         return
       }
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return
 
       event.preventDefault()
-      window.open(anchor.href, '_blank', 'noopener,noreferrer')
+      window.open(anchor.href, "_blank", "noopener,noreferrer")
     }
 
-    root.addEventListener('click', handleClick, true)
-    return () => root.removeEventListener('click', handleClick, true)
+    root.addEventListener("click", handleClick, true)
+    return () => root.removeEventListener("click", handleClick, true)
   }, [html])
 
   return (
-    <div ref={rootRef} style={{ width: "100%", minHeight: "100vh" }}>
-      <div ref={contentRef} dangerouslySetInnerHTML={{ __html: contentHtml }} />
+    <div
+      ref={wrapperRef}
+      className="flex min-h-screen w-full flex-col"
+      style={themeToStyle(resolvedTheme)}
+    >
+      <div ref={rootRef} className="w-full flex-1">
+        <div ref={contentRef} dangerouslySetInnerHTML={{ __html: contentHtml }} />
+      </div>
+      <SnaplinkPageFooter />
     </div>
   )
 }
