@@ -240,6 +240,23 @@
     animation-duration: 28s;
   }
 
+  @media (max-width: 640px) {
+    .snap-orb-1 {
+      width: 280px;
+      height: 280px;
+    }
+
+    .snap-orb-2 {
+      width: 240px;
+      height: 240px;
+    }
+
+    .snap-orb-3 {
+      width: 320px;
+      height: 200px;
+    }
+  }
+
   .snap-grid {
     @apply pointer-events-none absolute inset-0;
     background-image:

@@ -164,15 +164,13 @@ export default function PageEditorForm({
   }
 
   return (
-    <div className="text-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up">
+    <div className="text-white max-w-6xl mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4 animate-fade-in-up">
               {isEdit ? 'Edit' : 'Create New'}
               <span className="snap-gradient-text-static"> Page</span>
             </h1>
-            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+            <p className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto px-2">
               {isEdit
                 ? 'Update your HTML, CSS, and JavaScript. Changes go live on the same link.'
                 : 'Transform your code into a live web page with instant sharing and analytics'}
@@ -181,7 +179,7 @@ export default function PageEditorForm({
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <Card className="snap-card">
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-cyan-500/15 rounded-lg flex items-center justify-center">
                     <Settings className="w-5 h-5 text-cyan-400" />
@@ -314,7 +312,7 @@ export default function PageEditorForm({
             </Card>
 
             <Card className="snap-card">
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="w-10 h-10 bg-violet-500/15 rounded-lg flex items-center justify-center">
                     <Code2 className="w-5 h-5 text-violet-400" />
@@ -322,7 +320,7 @@ export default function PageEditorForm({
                   <h2 className="text-2xl text-white font-semibold">Code Editor</h2>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
                   {modeOptions.map((option) => {
                     const Icon = option.icon
                     const isSelected = editorMode === option.id
@@ -519,8 +517,6 @@ export default function PageEditorForm({
               </Button>
             </div>
           </form>
-        </div>
-      </div>
     </div>
   )
 }

@@ -22,8 +22,8 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="text-white animate-fade-in-up">
-      <div className="mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 snap-gradient-text-static">
+      <div className="mb-8 md:mb-10">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 md:mb-3 snap-gradient-text-static">
           Analytics
         </h1>
         <p className="text-zinc-400 text-lg">
@@ -31,7 +31,7 @@ export default async function AnalyticsPage() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
         <Card className="snap-card">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-3">
@@ -86,16 +86,16 @@ export default async function AnalyticsPage() {
       </div>
 
       <Card className="snap-card mb-10">
-        <CardContent className="p-8">
-          <h2 className="text-xl font-semibold mb-6">Views — Last 7 Days</h2>
+        <CardContent className="p-4 sm:p-6 md:p-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 md:mb-6">Views — Last 7 Days</h2>
           {analytics.totalViews === 0 ? (
             <p className="text-zinc-400">
               No views recorded yet. Share a public page to start collecting data.
             </p>
           ) : (
-            <div className="flex items-end gap-3 h-48">
+            <div className="flex items-end gap-1.5 sm:gap-3 h-36 sm:h-48 overflow-x-auto pb-2">
               {dailyViews.map((day) => (
-                <div key={day.date} className="flex-1 flex flex-col items-center gap-2">
+                <div key={day.date} className="flex-1 min-w-[2.5rem] flex flex-col items-center gap-1 sm:gap-2">
                   <div
                     className="w-full rounded-t-lg bg-gradient-to-t from-cyan-600/80 to-violet-500/80 transition-all duration-500"
                     style={{
@@ -117,8 +117,8 @@ export default async function AnalyticsPage() {
       </Card>
 
       <Card className="snap-card">
-        <CardContent className="p-8">
-          <h2 className="text-xl font-semibold mb-6">Per-Page Breakdown</h2>
+        <CardContent className="p-4 sm:p-6 md:p-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 md:mb-6">Per-Page Breakdown</h2>
           {analytics.pages.length === 0 ? (
             <p className="text-zinc-400">
               No pages yet.{' '}

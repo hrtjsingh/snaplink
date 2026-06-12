@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { AppBackground } from '@/components/AppBackground'
+import { SiteHeader } from '@/components/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -29,47 +30,16 @@ export default async function Home() {
   const stats = await getPlatformStats()
   return (
     <AppBackground>
-      {/* Header */}
-      <header className="container mx-auto px-4 py-6 relative animate-fade-in">
-        <nav className="flex justify-between items-center rounded-2xl border border-white/8 bg-white/3 px-6 py-4 backdrop-blur-xl">
-          <div className="text-2xl font-bold snap-gradient-text-static">
-            <Link href="/">
-              Snaplink
-            </Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link href="#features" className="snap-nav-link">
-              Features
-            </Link>
-            <Link href="#pricing" className="snap-nav-link">
-              Pricing
-            </Link>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">Sign In</Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button>Get Started</Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <Link href="/dashboard" className="snap-nav-link">
-                  Dashboard
-              </Link>
-              <UserButton />
-            </SignedIn>
-          </div>
-        </nav>
-      </header>
+      <SiteHeader variant="marketing" />
 
       {/* Hero Section */}
-      <main className="container mx-auto px-4 py-20">
+      <main className="container mx-auto px-4 py-12 md:py-20">
         <div className="text-center max-w-6xl mx-auto">
           <Badge className="mb-6 snap-badge animate-fade-in-up">
             Paste code · Get a link · Go live
           </Badge>
 
-          <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight animate-fade-in-up delay-100">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up delay-100">
             Build & Share
             <br />
             <span className="snap-gradient-text">
@@ -79,7 +49,7 @@ export default async function Home() {
             Instantly
           </h1>
 
-          <p className="text-xl text-zinc-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+          <p className="text-base sm:text-lg md:text-xl text-zinc-400 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
             Transform your ideas into stunning web pages with our powerful platform.
             Paste HTML/CSS/JS or upload files. Get instant public links with advanced analytics and collaboration tools.
           </p>
@@ -126,12 +96,12 @@ export default async function Home() {
         </div>
 
         {/* Dashboard Preview */}
-        <div className="max-w-7xl mx-auto mb-32">
+        <div className="max-w-7xl mx-auto mb-16 md:mb-32">
           <div className="relative">
             <div className="snap-glow" />
             <Card className="relative snap-card overflow-hidden animate-scale-in delay-400">
               <CardContent className="p-0">
-                <div className="border-b border-white/8 bg-white/5 px-6 py-4 flex items-center justify-between">
+                <div className="border-b border-white/8 bg-white/5 px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="flex space-x-2">
                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -142,7 +112,7 @@ export default async function Home() {
                   </div>
                   <Badge className="bg-green-500/20 text-green-400">Live</Badge>
                 </div>
-                <div className="p-8">
+                <div className="p-4 sm:p-8">
                   <div className="grid md:grid-cols-4 gap-6 mb-8">
                     <Card className="snap-card bg-white/5">
                       <CardContent className="p-6">
@@ -200,23 +170,23 @@ export default async function Home() {
         </div>
 
         {/* Features Section */}
-        <section id="features" className="mb-32 animate-fade-in-up delay-200">
+        <section id="features" className="mb-16 md:mb-32 animate-fade-in-up delay-200">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
               Your All-in-One
               <br />
               <span className="snap-gradient-text-static">
                 Business Intelligence Hub
               </span>
             </h2>
-            <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
               Everything you need to create, manage, and optimize your web presence with advanced analytics and collaboration tools.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="snap-card snap-card-hover group animate-fade-in-up delay-100">
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-cyan-500/15 group-hover:scale-110 transition-transform duration-300">
                   <Globe className="w-8 h-8 text-cyan-400" />
                 </div>
@@ -231,7 +201,7 @@ export default async function Home() {
             </Card>
 
             <Card className="snap-card snap-card-hover group animate-fade-in-up delay-200">
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-violet-500/15 group-hover:scale-110 transition-transform duration-300">
                   <Code className="w-8 h-8 text-violet-400" />
                 </div>
@@ -246,7 +216,7 @@ export default async function Home() {
             </Card>
 
             <Card className="snap-card snap-card-hover group animate-fade-in-up delay-300">
-              <CardContent className="p-8">
+              <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-emerald-500/15 group-hover:scale-110 transition-transform duration-300">
                   <Shield className="w-8 h-8 text-green-400" />
                 </div>
@@ -263,17 +233,17 @@ export default async function Home() {
         </section>
 
         {/* Analytics Section */}
-        <section className="mb-32">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+        <section className="mb-16 md:mb-32">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
                 The Story of Our
                 <br />
                 <span className="snap-gradient-text-static">
                   Growth & Impact
                 </span>
               </h2>
-              <p className="text-xl text-zinc-300 mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-6 md:mb-8">
                 Track every interaction, understand your audience, and optimize for better performance with our comprehensive analytics suite.
               </p>
               <div className="space-y-4">
@@ -294,7 +264,7 @@ export default async function Home() {
             <div className="relative">
               <div className="snap-glow" />
               <Card className="relative snap-card backdrop-blur">
-                <CardContent className="p-8">
+                <CardContent className="p-4 sm:p-6 md:p-8">
                   <div className="grid grid-cols-2 gap-6">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-cyan-400 mb-2">{stats.totalPages}</div>
@@ -321,16 +291,16 @@ export default async function Home() {
           </div>
         </section>
         {/* Pricing Section */}
-        <section id="pricing" className="mb-32">
+        <section id="pricing" className="mb-16 md:mb-32">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
               Simple, Transparent
               <br />
               <span className="snap-gradient-text-static">
                 Pricing Plans
               </span>
             </h2>
-            <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
               Choose a plan that fits your needs. Start free and scale as you grow — no hidden fees.
             </p>
           </div>
@@ -370,7 +340,7 @@ export default async function Home() {
             </Card>
 
             {/* Pro Plan */}
-            <Card className="snap-card border-cyan-500/40 shadow-lg shadow-cyan-500/20 scale-105 animate-pulse-glow">
+            <Card className="snap-card border-cyan-500/40 shadow-lg shadow-cyan-500/20 md:scale-105 animate-pulse-glow">
               <CardContent className="p-8 text-center">
                 <Badge className="mb-4 snap-badge">
                   Most Popular
@@ -442,16 +412,16 @@ export default async function Home() {
         </section>
 
         {/* Platform metrics */}
-        <section className="mb-32">
+        <section className="mb-16 md:mb-32">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
               Real Numbers,
               <br />
               <span className="snap-gradient-text-static">
                 Real Tracking
               </span>
             </h2>
-            <p className="text-xl text-zinc-300 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
               Every view, bounce, and session duration is recorded live — no mock data, no placeholders.
             </p>
           </div>
@@ -482,16 +452,16 @@ export default async function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="text-center py-20">
+        <section className="text-center py-12 md:py-20">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
               Ready to Build Something
               <br />
               <span className="snap-gradient-text-static">
                 Amazing?
               </span>
             </h2>
-            <p className="text-xl text-zinc-300 mb-12">
+            <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-8 md:mb-12">
               {stats.totalCreators > 0
                 ? `Join ${stats.totalCreators} creator${stats.totalCreators !== 1 ? 's' : ''} already publishing with Snaplink.`
                 : 'Be the first creator to publish with Snaplink.'}
@@ -522,7 +492,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="border-t border-white/8 bg-white/3 backdrop-blur-xl animate-fade-in">
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 py-10 sm:py-16">
           <div className="grid md:grid-cols-5 gap-8">
             <div className="md:col-span-2">
               <div className="text-2xl font-bold snap-gradient-text-static mb-4">

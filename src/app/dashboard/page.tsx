@@ -39,10 +39,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="text-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4 animate-fade-in-up">
               <span className="snap-gradient-text-static">My Pages</span>
             </h1>
             <p className="text-zinc-400 text-lg">
@@ -50,7 +49,7 @@ export default async function DashboardPage() {
               {analytics.totalPages !== 1 ? 's' : ''}
             </p>
           </div>
-          <Button asChild size="lg" className="mt-4 md:mt-0">
+          <Button asChild size="lg" className="mt-4 md:mt-0 w-full sm:w-auto">
             <Link href="/dashboard/new">
               <Plus className="h-5 w-5" />
               Create New Page
@@ -58,9 +57,9 @@ export default async function DashboardPage() {
           </Button>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
           <Card className="snap-card snap-card-hover animate-fade-in-up delay-100">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-zinc-400">Total Pages</span>
                 <FileText className="h-5 w-5 text-cyan-400" />
@@ -73,7 +72,7 @@ export default async function DashboardPage() {
           </Card>
 
           <Card className="snap-card snap-card-hover animate-fade-in-up delay-200">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-zinc-400">Total Views</span>
                 <Eye className="h-5 w-5 text-blue-400" />
@@ -88,7 +87,7 @@ export default async function DashboardPage() {
           </Card>
 
           <Card className="snap-card snap-card-hover animate-fade-in-up delay-300">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-zinc-400">Avg Views</span>
                 <BarChart3 className="h-5 w-5 text-green-400" />
@@ -99,7 +98,7 @@ export default async function DashboardPage() {
           </Card>
 
           <Card className="snap-card snap-card-hover animate-fade-in-up delay-400">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-zinc-400">Avg. Time</span>
                 <Activity className="h-5 w-5 text-orange-400" />
@@ -138,7 +137,7 @@ export default async function DashboardPage() {
           </Card>
         ) : (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <h2 className="text-2xl font-semibold">Your Pages</h2>
               <span className="text-sm text-zinc-400">
                 {analytics.pages.length} page{analytics.pages.length !== 1 ? 's' : ''} total
@@ -154,11 +153,11 @@ export default async function DashboardPage() {
                     key={page.slug}
                     className="snap-card snap-card-hover group animate-fade-in-up"
                   >
-                    <CardContent className="p-8">
+                    <CardContent className="p-4 sm:p-6 md:p-8">
                       <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex-1">
+                        <div className="flex-1 min-w-0 w-full">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                            <div className="flex-1 min-w-0">
                               <h3 className="text-xl text-white font-semibold mb-2 group-hover:text-cyan-400 transition-colors duration-300">
                                 {page.title}
                               </h3>
@@ -167,7 +166,7 @@ export default async function DashboardPage() {
                               )}
                             </div>
                             <Badge
-                              className={`ml-4 ${
+                              className={`self-start shrink-0 ${
                                 page.visibility === 'public'
                                   ? 'bg-green-500/20 text-green-400 border-green-500/30'
                                   : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
@@ -182,7 +181,7 @@ export default async function DashboardPage() {
                             </Badge>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-6 text-sm text-zinc-400 mb-6">
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-6 text-sm text-zinc-400 mb-6">
                             <div className="flex items-center space-x-2">
                               <Eye className="w-4 h-4" />
                               <span>{page.viewCount.toLocaleString()} views</span>
@@ -199,7 +198,7 @@ export default async function DashboardPage() {
                             </div>
                           </div>
 
-                          <div className="flex items-center space-x-4 p-4 rounded-xl border border-white/8 bg-white/5">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border border-white/8 bg-white/5">
                             <div className="flex-1">
                               <div className="text-xs text-zinc-400 mb-1">Page URL</div>
                               <code className="text-cyan-400 text-sm break-all font-mono">
@@ -210,28 +209,28 @@ export default async function DashboardPage() {
                           </div>
                         </div>
 
-                        <div className="flex flex-row lg:flex-col gap-3 lg:min-w-[120px]">
-                          <Button asChild size="sm" className="w-full lg:w-auto">
+                        <div className="flex flex-col w-full lg:w-auto gap-3 lg:min-w-[120px]">
+                          <Button asChild size="sm" className="w-full">
                             <Link href={`/r/${page.slug}`} target="_blank" rel="noopener noreferrer">
                               <ExternalLink className="h-4 w-4" />
                               View Page
                             </Link>
                           </Button>
-                          <Button asChild variant="glass" size="sm" className="w-full lg:w-auto">
+                          <Button asChild variant="glass" size="sm" className="w-full">
                             <Link href={`/dashboard/edit/${page.slug}`}>Edit</Link>
                           </Button>
-                          <Button asChild variant="glass" size="sm" className="w-full lg:w-auto">
+                          <Button asChild variant="glass" size="sm" className="w-full">
                             <Link href="/dashboard/analytics">Analytics</Link>
                           </Button>
                           <DeletePageButton
                             slug={page.slug}
                             title={page.title}
-                            className="w-full lg:w-auto"
+                            className="w-full"
                           />
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/8">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-6 pt-6 border-t border-white/8">
                         <div className="text-center">
                           <div className="text-lg font-semibold text-cyan-400">
                             {page.viewCount.toLocaleString()}
@@ -261,10 +260,10 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <Card className="snap-card mt-12">
-          <CardContent className="p-8">
+        <Card className="snap-card mt-8 md:mt-12">
+          <CardContent className="p-4 sm:p-6 md:p-8">
             <h3 className="text-xl font-semibold text-white mb-6">Quick Actions</h3>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
               <Link href="/dashboard/new">
                 <div className="flex items-center space-x-4 p-4 rounded-xl border border-white/8 hover:border-cyan-500/30 transition-all duration-300 cursor-pointer group snap-card-hover">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-cyan-500/15 group-hover:scale-110 transition-transform duration-300">
@@ -303,7 +302,6 @@ export default async function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
     </div>
   )
 }

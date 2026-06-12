@@ -25,8 +25,8 @@ export default function ComingSoon() {
   }, [])
 
   return (
-    <div className="flex mt-28 items-center justify-center bg-transparent animate-fade-in-up">
-      <div className="max-w-xl text-center text-white snap-card p-10">
+    <div className="flex mt-16 sm:mt-28 items-center justify-center bg-transparent animate-fade-in-up px-4">
+      <div className="max-w-xl w-full text-center text-white snap-card p-6 sm:p-10">
         <h1 className="mb-3 text-4xl font-bold md:text-5xl snap-gradient-text-static">
           🚀 Coming Soon
         </h1>
@@ -36,7 +36,7 @@ export default function ComingSoon() {
         </p>
 
         {timeLeft ? (
-          <div className="mb-10 flex justify-center gap-4">
+          <div className="mb-8 sm:mb-10 flex flex-wrap justify-center gap-2 sm:gap-4">
             {Object.entries(timeLeft).map(([label, value]) => (
               <div
                 key={label}
