@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -35,7 +35,7 @@ interface PageEditorFormProps {
   mode: 'create' | 'edit'
   slug?: string
   initialData?: PageFormValues
-  appUrl: string
+  publicPagesBaseUrl: string
 }
 
 const modeOptions = [
@@ -66,7 +66,7 @@ export default function PageEditorForm({
   mode,
   slug,
   initialData,
-  appUrl,
+  publicPagesBaseUrl,
 }: PageEditorFormProps) {
   const router = useRouter()
   const isEdit = mode === 'edit'
@@ -89,6 +89,23 @@ export default function PageEditorForm({
   const [css, setCss] = useState(initialData?.css ?? '')
   const [js, setJs] = useState(initialData?.js ?? '')
   const [isLoading, setIsLoading] = useState(false)
+  const [creationLimit, setCreationLimit] = useState<{
+    remaining: number
+    limit: number
+  } | null>(null)
+
+  useEffect(() => {
+    if (isEdit) return
+
+    fetch('/api/pages')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data.remaining === 'number') {
+          setCreationLimit({ remaining: data.remaining, limit: data.limit })
+        }
+      })
+      .catch(() => {})
+  }, [isEdit])
 
   const previewSlug =
     isEdit && slug
@@ -143,10 +160,19 @@ export default function PageEditorForm({
       )
 
       if (!response.ok) {
-        throw new Error(isEdit ? 'Failed to update page' : 'Failed to create page')
+        const data = await response.json().catch(() => null)
+        const message =
+          data?.error ||
+          (isEdit ? 'Failed to update page' : 'Failed to create page')
+        throw new Error(message)
       }
 
-      await response.json()
+      const data = await response.json()
+      if (!isEdit && typeof data.remaining === 'number') {
+        setCreationLimit((prev) =>
+          prev ? { ...prev, remaining: data.remaining } : null
+        )
+      }
       toast.success(
         isEdit ? 'Changes saved successfully!' : 'Page published successfully!'
       )
@@ -154,9 +180,11 @@ export default function PageEditorForm({
     } catch (error) {
       console.error('Error saving page:', error)
       toast.error(
-        isEdit
-          ? 'Failed to save changes. Please try again.'
-          : 'Failed to create page. Please try again.'
+        error instanceof Error
+          ? error.message
+          : isEdit
+            ? 'Failed to save changes. Please try again.'
+            : 'Failed to create page. Please try again.'
       )
     } finally {
       setIsLoading(false)
@@ -175,6 +203,13 @@ export default function PageEditorForm({
                 ? 'Update your HTML, CSS, and JavaScript. Changes go live on the same link.'
                 : 'Transform your code into a live web page with instant sharing and analytics'}
             </p>
+            {!isEdit && creationLimit && (
+              <p className="mt-3 text-sm text-zinc-500">
+                {creationLimit.remaining > 0
+                  ? `${creationLimit.remaining} of ${creationLimit.limit} pages remaining today`
+                  : `Daily limit reached (${creationLimit.limit} pages per day). Try again tomorrow.`}
+              </p>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -260,7 +295,7 @@ export default function PageEditorForm({
                         <div className="text-sm text-zinc-400 mb-2">Live URL</div>
                         <div className="flex items-center gap-2">
                           <code className="min-w-0 flex-1 text-cyan-400 font-mono text-sm break-all">
-                            {appUrl}/r/{previewSlug}
+                            {publicPagesBaseUrl}/r/{previewSlug}
                           </code>
                           {isEdit && slug && (
                             <Link
@@ -498,7 +533,8 @@ export default function PageEditorForm({
                 type="submit"
                 disabled={
                   isLoading ||
-                  !isFormValid(editorMode, title, { combinedHTML, html })
+                  !isFormValid(editorMode, title, { combinedHTML, html }) ||
+                  (!isEdit && creationLimit?.remaining === 0)
                 }
                 size="lg"
                 className="min-w-[220px] group"

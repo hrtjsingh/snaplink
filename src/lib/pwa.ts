@@ -15,16 +15,16 @@ export function buildManifest(
   description: string,
   origin: string
 ) {
-  const startUrl = `${origin}${pagePath(slug)}`
+  const pageUrl = `${origin}${pagePath(slug)}`
   const iconUrl = `${origin}${pagePath(slug)}/icon`
 
   return {
-    id: startUrl,
+    id: pageUrl,
     name: title,
     short_name: title.length > 14 ? `${title.slice(0, 12)}…` : title,
     description: description || `${title} — installed with Snaplink`,
-    start_url: startUrl,
-    scope: `${origin}${pagePath(slug)}/`,
+    start_url: pageUrl,
+    scope: pageUrl,
     display: 'standalone',
     display_override: ['standalone', 'browser'],
     background_color: '#030712',

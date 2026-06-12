@@ -1,5 +1,6 @@
 import { Db, ObjectId } from 'mongodb'
 import { connectDB } from '@/lib/mongodb'
+import { checkPublicPageAccess } from '@/lib/moderation'
 import type { PageStats, PlatformStats, UserAnalytics } from '@/lib/types'
 
 export const BOUNCE_THRESHOLD_MS = 10_000
@@ -135,6 +136,9 @@ export async function recordPageView(slug: string, referrer?: string) {
 
   const page = await db.collection('pages').findOne({ slug, visibility: 'public' })
   if (!page) return null
+
+  const access = await checkPublicPageAccess(page)
+  if (!access.allowed) return null
 
   const viewedAt = new Date()
   const result = await db.collection('page_views').insertOne({

@@ -11,6 +11,7 @@ import {
 } from '@clerk/nextjs'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AdminDashboardLink } from '@/components/AdminDashboardLink'
 
 type SiteHeaderProps = {
   variant: 'marketing' | 'dashboard'
@@ -47,6 +48,7 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
         <Link href="/dashboard/new" className="snap-nav-link">
           Create New
         </Link>
+        <AdminDashboardLink />
       </>
     )
 
@@ -153,7 +155,12 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
           />
           <div className="absolute inset-x-0 top-full z-50 mt-2 md:hidden">
             <div className="rounded-2xl border border-white/8 bg-[var(--snap-bg-elevated)]/95 px-4 py-4 shadow-2xl shadow-black/40 backdrop-blur-xl animate-fade-in-up">
-              <div className="flex flex-col gap-3">{mobileLinks}</div>
+              <div className="flex flex-col gap-3">
+                {mobileLinks}
+                {variant === 'dashboard' && (
+                  <AdminDashboardLink mobileMenu onNavigate={close} />
+                )}
+              </div>
             </div>
           </div>
         </>

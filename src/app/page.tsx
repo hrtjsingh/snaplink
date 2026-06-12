@@ -323,7 +323,7 @@ export default async function Home() {
                 <ul className="space-y-3 text-zinc-300 mb-8 text-left max-w-lg mx-auto w-full">
                   <li className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
-                    Create and publish pages during beta
+                    Create and publish pages during beta (3 per day)
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />

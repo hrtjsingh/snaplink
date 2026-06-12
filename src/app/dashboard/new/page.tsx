@@ -1,8 +1,8 @@
 import PageEditorForm from '@/components/PageEditorForm'
-import { getServerOrigin } from '@/lib/base-url'
+import { getPublicPagesBaseUrl } from '@/lib/user-pages-origin'
 
 export default async function NewPagePage() {
-  const appUrl = await getServerOrigin()
+  const publicPagesBaseUrl = await getPublicPagesBaseUrl()
 
-  return <PageEditorForm mode="create" appUrl={appUrl} />
+  return <PageEditorForm mode="create" publicPagesBaseUrl={publicPagesBaseUrl} />
 }

@@ -1,31 +1,52 @@
+import { auth } from '@clerk/nextjs/server'
 import { connectDB } from '@/lib/mongodb'
-import { notFound } from 'next/navigation'
 import type { Metadata, Viewport } from 'next'
 import { PageData } from '@/lib/types'
 import { isPwaInstallable, pagePath } from '@/lib/pwa'
+import { checkPublicPageAccess, type PublicPageAccess } from '@/lib/moderation'
+import { isSuperAdmin } from '@/lib/admin'
+import { shouldAllowPersistentUserStorage } from '@/lib/sandbox-iframe'
 import ClientRenderer from '@/components/ClientRenderer'
 import ViewTracker from '@/components/ViewTracker'
+import {
+  PageFallback,
+  type PageFallbackReason,
+} from '@/components/PageFallback'
 
-async function getPageData(slug: string) {
+async function getPageRecord(slug: string) {
   try {
     const db = await connectDB()
-    const page = await db.collection('pages').findOne({ slug })
-
-    if (!page || page.visibility === 'private') return null
-
-    return {
-      title: page.title,
-      description: page.description,
-      html: page.html,
-      css: page.css,
-      js: page.js,
-      visibility: page.visibility as 'public' | 'private',
-      pwaEnabled: page.pwaEnabled !== false,
-    }
+    return db.collection('pages').findOne({ slug })
   } catch (err) {
     console.error(err)
     return null
   }
+}
+
+async function getPageData(slug: string) {
+  const page = await getPageRecord(slug)
+  const access = await checkPublicPageAccess(page)
+
+  if (!access.allowed) return { access, page: null, record: page }
+
+  return {
+    access,
+    record: page,
+    page: {
+      title: page!.title as string,
+      description: page!.description as string,
+      html: page!.html as string,
+      css: page!.css as string,
+      js: page!.js as string,
+      visibility: page!.visibility as 'public' | 'private',
+      pwaEnabled: page!.pwaEnabled !== false,
+    },
+  }
+}
+
+function fallbackReason(access: PublicPageAccess): PageFallbackReason {
+  if (access.allowed) return 'not_found'
+  return access.reason
 }
 
 export async function generateMetadata({
@@ -34,12 +55,18 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const page = await getPageData(slug)
+  const result = await getPageData(slug)
 
-  if (!page) {
-    return { title: 'Page not found' }
+  if (!result.access.allowed || !result.page) {
+    const reason = fallbackReason(result.access)
+    const title =
+      reason === 'not_found' || reason === 'private'
+        ? 'Page not found'
+        : 'Page unavailable'
+    return { title: `${title} · Snaplink` }
   }
 
+  const page = result.page
   const pwa = isPwaInstallable(page.visibility, page.pwaEnabled)
   const iconPath = `${pagePath(slug)}/icon`
 
@@ -74,12 +101,11 @@ export async function generateViewport({
   params: Promise<{ slug: string }>
 }): Promise<Viewport> {
   const { slug } = await params
-  const page = await getPageData(slug)
+  const result = await getPageData(slug)
 
-  if (!page) return {}
+  if (!result.page) return { themeColor: '#06b6d4' }
 
-  const pwa = isPwaInstallable(page.visibility, page.pwaEnabled)
-
+  const pwa = isPwaInstallable(result.page.visibility, result.page.pwaEnabled)
   return pwa ? { themeColor: '#06b6d4' } : {}
 }
 
@@ -89,9 +115,30 @@ export default async function RenderPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const page = await getPageData(slug)
+  const result = await getPageData(slug)
 
-  if (!page) notFound()
+  if (!result.access.allowed) {
+    const reason = fallbackReason(result.access)
+    const pageTitle =
+      result.record?.title && typeof result.record.title === 'string'
+        ? result.record.title
+        : undefined
+
+    const { userId } = await auth()
+    const showAdminUnblock =
+      reason === 'page_blocked' && Boolean(userId && isSuperAdmin(userId))
+
+    return (
+      <PageFallback
+        slug={slug}
+        pageTitle={pageTitle}
+        reason={reason}
+        showAdminUnblock={showAdminUnblock}
+      />
+    )
+  }
+
+  const page = result.page!
 
   const pageData: PageData = {
     title: page.title,
@@ -105,7 +152,10 @@ export default async function RenderPage({
   return (
     <>
       <ViewTracker slug={slug} />
-      <ClientRenderer page={pageData} />
+      <ClientRenderer
+        page={pageData}
+        persistentStorage={shouldAllowPersistentUserStorage()}
+      />
     </>
   )
 }

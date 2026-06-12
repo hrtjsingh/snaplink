@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { connectDB } from '@/lib/mongodb'
 import { normalizePageCode } from '@/lib/page-code'
+import { assertUserCanCreateContent } from '@/lib/moderation'
 import { sanitizeHTML, sanitizeCSS } from '@/lib/utils'
 
 async function getOwnedPage(slug: string, userId: string) {
@@ -59,6 +60,15 @@ export async function PUT(
 
     if (!page) {
       return NextResponse.json({ error: 'Page not found' }, { status: 404 })
+    }
+
+    try {
+      await assertUserCanCreateContent(userId)
+    } catch {
+      return NextResponse.json(
+        { error: 'Your account has been restricted. You cannot edit pages.' },
+        { status: 403 }
+      )
     }
 
     const body = await request.json()

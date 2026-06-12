@@ -10,7 +10,7 @@ import {
   formatGrowth,
   getUserAnalytics,
 } from '@/lib/analytics'
-import { getServerOrigin } from '@/lib/base-url'
+import { getPublicPagesBaseUrl } from '@/lib/user-pages-origin'
 import {
   Plus,
   Globe,
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
   if (!userId) return null
 
   const analytics = await getUserAnalytics(userId)
-  const appUrl = await getServerOrigin()
+  const publicPagesBaseUrl = await getPublicPagesBaseUrl()
 
   return (
     <div className="text-white">
@@ -146,7 +146,7 @@ export default async function DashboardPage() {
 
             <div className="grid gap-6">
               {analytics.pages.map((page) => {
-                const pageUrl = `${appUrl}/r/${page.slug}`
+                const pageUrl = `${publicPagesBaseUrl}/r/${page.slug}`
 
                 return (
                   <Card
