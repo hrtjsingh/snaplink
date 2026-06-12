@@ -548,7 +548,7 @@ export default async function Home() {
 
           <div className="border-t border-white/8 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-zinc-400 text-sm">
-              © 2025 Snaplink. All rights reserved.
+              © 2026 Snaplink. All rights reserved.
             </p>
             <p className="text-zinc-400 text-sm mt-4 md:mt-0">
               Made with ❤️ for developers worldwide
