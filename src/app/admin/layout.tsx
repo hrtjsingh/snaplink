@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { AppBackground } from '@/components/AppBackground'
 import { AdminNav } from '@/components/AdminNav'
 import { isSuperAdmin } from '@/lib/admin'
+import { NO_INDEX_ROBOTS } from '@/lib/app-seo'
+
+export const metadata: Metadata = {
+  title: 'Admin',
+  robots: NO_INDEX_ROBOTS,
+}
 
 export default async function AdminLayout({
   children,

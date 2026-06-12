@@ -1,7 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { AppBackground } from '@/components/AppBackground'
+import { AppJsonLd } from '@/components/AppJsonLd'
 import { SiteHeader } from '@/components/SiteHeader'
+import { buildMarketingMetadata, SITE_NAME, SITE_TAGLINE } from '@/lib/app-seo'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -21,6 +24,11 @@ import {
   Sparkles,
 } from 'lucide-react'
 
+export const metadata: Metadata = buildMarketingMetadata({
+  title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+  path: '/',
+})
+
 function formatCompact(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`
@@ -31,6 +39,7 @@ export default async function Home() {
   const stats = await getPlatformStats()
   return (
     <AppBackground>
+      <AppJsonLd />
       <SiteHeader variant="marketing" />
 
       {/* Hero Section */}

@@ -1,9 +1,18 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { notFound } from 'next/navigation'
 import { connectDB } from '@/lib/mongodb'
 import PageEditorForm from '@/components/PageEditorForm'
+import { NO_INDEX_ROBOTS } from '@/lib/app-seo'
 import { getPublicPagesBaseUrl } from '@/lib/user-pages-origin'
 import { normalizePageCode, type PageFormValues } from '@/lib/page-code'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Edit Page',
+    robots: NO_INDEX_ROBOTS,
+  }
+}
 
 async function getPageForEdit(
   slug: string,

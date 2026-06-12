@@ -1,6 +1,8 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
+import { NO_INDEX_ROBOTS } from '@/lib/app-seo'
 import {
   formatDuration,
   formatGrowth,
@@ -8,6 +10,11 @@ import {
   getUserAnalytics,
 } from '@/lib/analytics'
 import { BarChart3, Eye, Clock, TrendingDown } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Analytics',
+  robots: NO_INDEX_ROBOTS,
+}
 
 export default async function AnalyticsPage() {
   const { userId } = await auth()

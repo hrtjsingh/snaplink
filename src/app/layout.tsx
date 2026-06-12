@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
+import { buildRootLayoutMetadata } from '@/lib/app-seo'
 import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from 'sonner'
@@ -14,15 +15,7 @@ const mono = JetBrains_Mono({
   variable: '--font-mono',
 })
 
-export const metadata: Metadata = {
-  title: 'Snaplink — Paste code, get a link',
-  description: 'Paste HTML, CSS, and JavaScript. Publish shareable web pages instantly.',
-  applicationName: 'Snaplink',
-  icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
-    apple: [{ url: '/apple-icon.svg', type: 'image/svg+xml' }],
-  },
-}
+export const metadata: Metadata = buildRootLayoutMetadata()
 
 export const viewport: Viewport = {
   width: 'device-width',

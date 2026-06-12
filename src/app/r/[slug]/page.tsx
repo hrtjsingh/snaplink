@@ -6,7 +6,11 @@ import { isPwaInstallable, pagePath } from '@/lib/pwa'
 import { checkPublicPageAccess, type PublicPageAccess } from '@/lib/moderation'
 import { isSuperAdmin } from '@/lib/admin'
 import { shouldAllowPersistentUserStorage } from '@/lib/sandbox-iframe'
+import { buildPublicPageMetadata } from '@/lib/page-seo'
+import { NO_INDEX_ROBOTS } from '@/lib/app-seo'
+import { getPublicPageUrl } from '@/lib/user-pages-origin'
 import ClientRenderer from '@/components/ClientRenderer'
+import { SeoPageContent } from '@/components/SeoPageContent'
 import ViewTracker from '@/components/ViewTracker'
 import {
   PageFallback,
@@ -63,22 +67,31 @@ export async function generateMetadata({
       reason === 'not_found' || reason === 'private'
         ? 'Page not found'
         : 'Page unavailable'
-    return { title: `${title} · Snaplink` }
+    return {
+      title: `${title} · Snaplink`,
+      robots: NO_INDEX_ROBOTS,
+    }
   }
 
-  const page = result.page
+  const page = result.page!
   const pwa = isPwaInstallable(page.visibility, page.pwaEnabled)
   const iconPath = `${pagePath(slug)}/icon`
+  const seo = await buildPublicPageMetadata({
+    slug,
+    title: page.title,
+    description: page.description,
+    html: page.html,
+    visibility: page.visibility,
+  })
 
   return {
-    title: page.title,
-    description: page.description || undefined,
+    ...seo,
     manifest: pwa ? `${pagePath(slug)}/manifest.webmanifest` : undefined,
     appleWebApp: pwa
       ? {
           capable: true,
           title: page.title,
-          statusBarStyle: 'black-translucent',
+          statusBarStyle: 'black-translucent' as const,
         }
       : undefined,
     icons: pwa
@@ -139,6 +152,13 @@ export default async function RenderPage({
   }
 
   const page = result.page!
+  const canonicalUrl = await getPublicPageUrl(slug)
+  const updatedAt =
+    result.record?.updatedAt instanceof Date
+      ? result.record.updatedAt
+      : result.record?.updatedAt
+        ? new Date(result.record.updatedAt as string | number)
+        : undefined
 
   const pageData: PageData = {
     title: page.title,
@@ -151,6 +171,15 @@ export default async function RenderPage({
 
   return (
     <>
+      <SeoPageContent
+        title={page.title}
+        description={page.description}
+        html={page.html}
+        css={page.css}
+        js={page.js}
+        canonicalUrl={canonicalUrl}
+        updatedAt={updatedAt}
+      />
       <ViewTracker slug={slug} />
       <ClientRenderer
         page={pageData}
