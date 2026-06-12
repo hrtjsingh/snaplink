@@ -18,6 +18,7 @@ import {
   PieChart,
   Activity,
   Users,
+  Sparkles,
 } from 'lucide-react'
 
 function formatCompact(n: number): string {
@@ -290,122 +291,69 @@ export default async function Home() {
             </div>
           </div>
         </section>
-        {/* Pricing Section */}
+        {/* Pricing Section — beta */}
         <section id="pricing" className="mb-16 md:mb-32">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 md:mb-12">
+            <Badge className="mb-4 snap-badge">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Beta
+            </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              Simple, Transparent
+              Free While We
               <br />
               <span className="snap-gradient-text-static">
-                Pricing Plans
+                Build in Beta
               </span>
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
-              Choose a plan that fits your needs. Start free and scale as you grow — no hidden fees.
+              Page creation is live in beta. Create, publish, and share — no credit card required.
+              Pricing plans will be introduced soon.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Free Plan */}
-            <Card className="snap-card snap-card-hover">
-              <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-semibold text-white mb-4">Free</h3>
-                <p className="text-zinc-400 mb-6">For individuals just getting started</p>
-                <div className="text-4xl font-bold text-white mb-6">$0</div>
-                <ul className="space-y-3 text-zinc-300 mb-8 text-left">
+          <div className="max-w-6xl mx-auto w-full px-0">
+            <Card className="snap-card w-full max-w-lg mx-auto border-cyan-500/30 shadow-lg shadow-cyan-500/10 py-0 gap-0">
+              <CardContent className="p-6 sm:p-8 md:p-10 text-center">
+                <h3 className="text-2xl font-semibold text-white mb-2">Beta Access</h3>
+                <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
+                  Everything you need to ship pages today — on us during early access.
+                </p>
+                <div className="text-4xl font-bold text-white mb-2">$0</div>
+                <p className="text-sm text-cyan-400 mb-8">Pricing coming soon</p>
+                <ul className="space-y-3 text-zinc-300 mb-8 text-left max-w-lg mx-auto w-full">
                   <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    3 Pages Included
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
+                    Create and publish pages during beta
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Basic Analytics
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
+                    Live analytics on every page
                   </li>
                   <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Community Support
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
+                    Public share links and optional PWA install
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
+                    Early adopters get first look at paid plans
                   </li>
                 </ul>
+                <div className="flex justify-center w-full">
                 <SignedOut>
                   <SignUpButton mode="modal">
-                    <Button className="w-full">Get Started</Button>
+                    <Button size="lg" className="w-full min-w-[220px] sm:w-auto">
+                      Join Beta — Get Started <ArrowRight className="h-5 w-5" />
+                    </Button>
                   </SignUpButton>
                 </SignedOut>
                 <SignedIn>
-                  <Button asChild className="w-full">
-                    <Link href="/dashboard/new">Create Free Page</Link>
+                  <Button asChild size="lg" className="w-full min-w-[220px] sm:w-auto">
+                    <Link href="/dashboard/new">
+                      Create a Page <ArrowRight className="h-5 w-5" />
+                    </Link>
                   </Button>
                 </SignedIn>
-              </CardContent>
-            </Card>
-
-            {/* Pro Plan */}
-            <Card className="snap-card border-cyan-500/40 shadow-lg shadow-cyan-500/20 md:scale-105 animate-pulse-glow">
-              <CardContent className="p-8 text-center">
-                <Badge className="mb-4 snap-badge">
-                  Most Popular
-                </Badge>
-                <h3 className="text-2xl font-semibold text-white mb-4">Pro</h3>
-                <p className="text-zinc-400 mb-6">For professionals who need more power</p>
-                <div className="text-4xl font-bold text-white mb-6">$19<span className="text-lg text-zinc-400">/mo</span></div>
-                <ul className="space-y-3 text-zinc-300 mb-8 text-left">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Unlimited Pages
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Advanced Analytics
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Priority Email Support
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Custom Branding
-                  </li>
-                </ul>
-                <SignedOut>
-                  <SignUpButton mode="modal">
-                    <Button className="w-full">Upgrade to Pro</Button>
-                  </SignUpButton>
-                </SignedOut>
-                <SignedIn>
-                  <Button asChild className="w-full">
-                    <Link href="/dashboard/new">Go Pro</Link>
-                  </Button>
-                </SignedIn>
-              </CardContent>
-            </Card>
-
-            {/* Enterprise Plan */}
-            <Card className="snap-card snap-card-hover">
-              <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-semibold text-white mb-4">Enterprise</h3>
-                <p className="text-zinc-400 mb-6">For teams & large organizations</p>
-                <div className="text-4xl font-bold text-white mb-6">Custom</div>
-                <ul className="space-y-3 text-zinc-300 mb-8 text-left">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Everything in Pro
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Dedicated Account Manager
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    SLA & 24/7 Support
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
-                    Team Collaboration Tools
-                  </li>
-                </ul>
-                <Button variant="glass" className="w-full">
-                  Contact Sales
-                </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -465,13 +413,13 @@ export default async function Home() {
               {stats.totalCreators > 0
                 ? `Join ${stats.totalCreators} creator${stats.totalCreators !== 1 ? 's' : ''} already publishing with Snaplink.`
                 : 'Be the first creator to publish with Snaplink.'}
-              {' '}Start free today.
+              {' '}Join the beta — free while we build.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <SignedOut>
                 <SignUpButton mode="modal">
                   <Button size="lg">
-                    Get Started Free <ArrowRight className="h-5 w-5" />
+                    Join Beta <ArrowRight className="h-5 w-5" />
                   </Button>
                 </SignUpButton>
               </SignedOut>
@@ -483,7 +431,7 @@ export default async function Home() {
                 </Button>
               </SignedIn>
               <Button asChild variant="glass" size="lg">
-                <Link href="#pricing">View Pricing</Link>
+                <Link href="#pricing">Beta &amp; Pricing</Link>
               </Button>
             </div>
           </div>
@@ -519,7 +467,7 @@ export default async function Home() {
               <h4 className="font-semibold text-white mb-4">Product</h4>
               <ul className="space-y-3 text-zinc-400">
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Pricing</a></li>
+                <li><a href="#pricing" className="hover:text-cyan-400 transition-colors">Beta &amp; Pricing</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Templates</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Integrations</a></li>
               </ul>

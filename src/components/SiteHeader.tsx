@@ -27,7 +27,7 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
           Features
         </Link>
         <Link href="#pricing" className="snap-nav-link">
-          Pricing
+          Beta
         </Link>
       </>
     ) : (
@@ -48,7 +48,7 @@ export function SiteHeader({ variant }: SiteHeaderProps) {
           Features
         </Link>
         <Link href="#pricing" className="snap-nav-link py-2" onClick={close}>
-          Pricing
+          Beta
         </Link>
         <SignedOut>
           <SignInButton mode="modal">
