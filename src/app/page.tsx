@@ -70,10 +70,10 @@ export default async function Home() {
                 </Link>
               </Button>
             </SignedIn>
-            <Button variant="glass" size="lg">
+            {/* <Button variant="glass" size="lg">
               <PlayCircle className="h-5 w-5" />
               Watch Demo
-            </Button>
+            </Button> */}
           </div>
 
           {/* Live platform stats */}
