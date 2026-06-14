@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     <div className="text-white">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12">
           <div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4 animate-fade-in-up">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4 tracking-tight animate-fade-in-up">
               <span className="snap-gradient-text-static">My Pages</span>
             </h1>
             <p className="text-zinc-400 text-lg">

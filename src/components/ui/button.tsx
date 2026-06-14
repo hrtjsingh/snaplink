@@ -5,14 +5,14 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--snap-bg)]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-teal-400/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--snap-bg)]",
   {
     variants: {
       variant: {
         default:
-          "border-0 text-white shadow-lg bg-gradient-to-br from-cyan-500 via-violet-500 to-rose-500 hover:shadow-cyan-500/30 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0",
+          "border border-teal-400/20 text-white bg-teal-400/90 text-[var(--snap-bg)] shadow-lg shadow-teal-400/20 hover:bg-teal-300 hover:shadow-teal-400/30 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0",
         glass:
-          "border border-white/15 bg-white/5 text-white backdrop-blur-sm hover:border-cyan-500/40 hover:bg-white/10 hover:scale-[1.02]",
+          "border border-white/10 bg-white/3 text-white backdrop-blur-md hover:border-teal-400/30 hover:bg-white/6 hover:scale-[1.02]",
         outline:
           "border border-white/15 bg-transparent text-white hover:bg-white/10 hover:border-white/25",
         secondary:
@@ -22,7 +22,7 @@ const buttonVariants = cva(
         destructive:
           "border-0 bg-red-600 text-white hover:bg-red-700",
         link:
-          "border-0 bg-transparent text-cyan-400 underline-offset-4 hover:underline hover:text-cyan-300",
+          "border-0 bg-transparent text-teal-300 underline-offset-4 hover:underline hover:text-teal-200",
       },
       size: {
         default: "h-10 px-5 py-2 has-[>svg]:px-4",

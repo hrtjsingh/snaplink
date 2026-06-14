@@ -6,7 +6,9 @@ export function AppBackground({ children }: { children: React.ReactNode }) {
         <div className="snap-orb snap-orb-2" />
         <div className="snap-orb snap-orb-3" />
         <div className="snap-grid" />
+        <div className="snap-vignette" />
       </div>
+      <div className="snap-grain" aria-hidden />
       {children}
     </div>
   )

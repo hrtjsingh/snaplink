@@ -3,7 +3,11 @@ import Link from 'next/link'
 import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { AppBackground } from '@/components/AppBackground'
 import { AppJsonLd } from '@/components/AppJsonLd'
+import { Marquee } from '@/components/Marquee'
+import { ScrollReveal } from '@/components/ScrollReveal'
+import { SectionLabel } from '@/components/SectionLabel'
 import { SiteHeader } from '@/components/SiteHeader'
+import { SpotlightCard } from '@/components/SpotlightCard'
 import { buildMarketingMetadata, SITE_NAME, SITE_TAGLINE } from '@/lib/app-seo'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -14,14 +18,13 @@ import {
   Code,
   Globe,
   Shield,
-  TrendingUp,
   CheckCircle,
-  PlayCircle,
   BarChart3,
-  PieChart,
   Activity,
   Users,
   Sparkles,
+  Zap,
+  Layers,
 } from 'lucide-react'
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -37,479 +40,489 @@ function formatCompact(n: number): string {
 
 export default async function Home() {
   const stats = await getPlatformStats()
+
   return (
     <AppBackground>
       <AppJsonLd />
       <SiteHeader variant="marketing" />
 
-      {/* Hero Section */}
-      <main className="container mx-auto px-4 py-12 md:py-20">
-        <div className="text-center max-w-6xl mx-auto">
-          <Badge className="mb-6 snap-badge animate-fade-in-up">
-            Paste code · Get a link · Go live
-          </Badge>
+      <main>
+        {/* Hero */}
+        <section className="container mx-auto px-4 pt-8 pb-16 md:pt-16 md:pb-28 relative">
+          <div className="snap-hero-glow" aria-hidden />
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight animate-fade-in-up delay-100">
-            Build & Share
-            <br />
-            <span className="snap-gradient-text">
-              Web Pages
-            </span>
-            <br />
-            Instantly
-          </h1>
-
-          <p className="text-base sm:text-lg md:text-xl text-zinc-400 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-200">
-            Transform your ideas into stunning web pages with our powerful platform.
-            Paste HTML/CSS/JS or upload files. Get instant public links with advanced analytics and collaboration tools.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up delay-300">
-            <SignedOut>
-              <SignUpButton mode="modal">
-                <Button size="lg">
-                  Start Building <ArrowRight className="h-5 w-5" />
-                </Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <Button asChild size="lg">
-                <Link href="/dashboard/new">
-                  Create New Page <ArrowRight className="h-5 w-5" />
-                </Link>
-              </Button>
-            </SignedIn>
-            {/* <Button variant="glass" size="lg">
-              <PlayCircle className="h-5 w-5" />
-              Watch Demo
-            </Button> */}
-          </div>
-
-          {/* Live platform stats */}
-          <div className="text-center mb-20 animate-fade-in-up delay-400">
-            <p className="text-zinc-400 text-sm mb-6">Live platform activity</p>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-              <div>
-                <div className="text-2xl font-bold text-white">{stats.totalCreators}</div>
-                <div className="text-sm text-zinc-500">Creators</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-white">{stats.totalPages}</div>
-                <div className="text-sm text-zinc-500">Pages published</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-white">{formatCompact(stats.totalViews)}</div>
-                <div className="text-sm text-zinc-500">Total views</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Preview */}
-        <div className="max-w-7xl mx-auto mb-16 md:mb-32">
-          <div className="relative">
-            <div className="snap-glow" />
-            <Card className="relative snap-card overflow-hidden animate-scale-in delay-400">
-              <CardContent className="p-0">
-                <div className="border-b border-white/8 bg-white/5 px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-zinc-400 text-sm">Snaplink Dashboard</span>
-                  </div>
-                  <Badge className="bg-green-500/20 text-green-400">Live</Badge>
-                </div>
-                <div className="p-4 sm:p-8">
-                  <div className="grid md:grid-cols-4 gap-6 mb-8">
-                    <Card className="snap-card bg-white/5">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-zinc-400">Total Pages</span>
-                          <TrendingUp className="h-4 w-4 text-green-400" />
-                        </div>
-                        <div className="text-3xl font-bold text-white">{stats.totalPages}</div>
-                        <div className="text-sm text-green-400">{formatGrowth(stats.pagesGrowth)}</div>
-                      </CardContent>
-                    </Card>
-                    <Card className="snap-card bg-white/5">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-zinc-400">Views</span>
-                          <BarChart3 className="h-4 w-4 text-blue-400" />
-                        </div>
-                        <div className="text-3xl font-bold text-white">{formatCompact(stats.totalViews)}</div>
-                        <div className="text-sm text-blue-400">{formatGrowth(stats.viewsGrowth)}</div>
-                      </CardContent>
-                    </Card>
-                    <Card className="snap-card bg-white/5">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-zinc-400">Engagement</span>
-                          <Activity className="h-4 w-4 text-violet-400" />
-                        </div>
-                        <div className="text-3xl font-bold text-white">{stats.engagementRate}%</div>
-                        <div className="text-sm text-violet-400">engagement rate</div>
-                      </CardContent>
-                    </Card>
-                    <Card className="snap-card bg-white/5">
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-zinc-400">Performance</span>
-                          <PieChart className="h-4 w-4 text-orange-400" />
-                        </div>
-                        <div className="text-3xl font-bold text-white">
-                          {stats.avgDurationMs > 0 ? formatDuration(stats.avgDurationMs) : '—'}
-                        </div>
-                        <div className="text-sm text-orange-400">avg. time on page</div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="h-64 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-500/15 via-violet-500/15 to-rose-500/15">
-                    <div className="text-center">
-                      <BarChart3 className="h-16 w-16 mx-auto mb-4 text-cyan-400 animate-float" />
-                      <p className="text-zinc-400">Interactive Analytics Dashboard</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Features Section */}
-        <section id="features" className="mb-16 md:mb-32 animate-fade-in-up delay-200">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              Your All-in-One
-              <br />
-              <span className="snap-gradient-text-static">
-                Business Intelligence Hub
-              </span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
-              Everything you need to create, manage, and optimize your web presence with advanced analytics and collaboration tools.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="snap-card snap-card-hover group animate-fade-in-up delay-100">
-              <CardContent className="p-4 sm:p-6 md:p-8">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-cyan-500/15 group-hover:scale-110 transition-transform duration-300">
-                  <Globe className="w-8 h-8 text-cyan-400" />
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Instant Global Links</h3>
-                <p className="text-zinc-300 mb-6">
-                  Create shareable pages with unique URLs. Global CDN ensures fast loading worldwide with 99.9% uptime guarantee.
-                </p>
-                <div className="flex items-center text-cyan-400 font-medium">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="snap-card snap-card-hover group animate-fade-in-up delay-200">
-              <CardContent className="p-4 sm:p-6 md:p-8">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-violet-500/15 group-hover:scale-110 transition-transform duration-300">
-                  <Code className="w-8 h-8 text-violet-400" />
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Advanced Code Editor</h3>
-                <p className="text-zinc-300 mb-6">
-                  Professional IDE with syntax highlighting, auto-completion, and real-time collaboration. Supports all modern frameworks.
-                </p>
-                <div className="flex items-center text-violet-400 font-medium">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="snap-card snap-card-hover group animate-fade-in-up delay-300">
-              <CardContent className="p-4 sm:p-6 md:p-8">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-emerald-500/15 group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="w-8 h-8 text-green-400" />
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-4">Enterprise Security</h3>
-                <p className="text-zinc-300 mb-6">
-                  Bank-grade security with SSL encryption, privacy controls, and compliance with GDPR, SOC2, and ISO standards.
-                </p>
-                <div className="flex items-center text-green-400 font-medium">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Analytics Section */}
-        <section className="mb-16 md:mb-32">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-                The Story of Our
-                <br />
-                <span className="snap-gradient-text-static">
-                  Growth & Impact
-                </span>
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-6 md:mb-8">
-                Track every interaction, understand your audience, and optimize for better performance with our comprehensive analytics suite.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-6 w-6 text-green-400" />
-                  <span className="text-zinc-300">Real-time visitor tracking and behavior analysis</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-6 w-6 text-green-400" />
-                  <span className="text-zinc-300">Advanced conversion funnel optimization</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-6 w-6 text-green-400" />
-                  <span className="text-zinc-300">Custom event tracking and goal setting</span>
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="snap-glow" />
-              <Card className="relative snap-card backdrop-blur">
-                <CardContent className="p-4 sm:p-6 md:p-8">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="text-center">
-                      <div className="text-4xl font-bold text-cyan-400 mb-2">{stats.totalPages}</div>
-                      <div className="text-sm text-zinc-400">Pages Live</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-4xl font-bold text-rose-400 mb-2">{stats.engagementRate}%</div>
-                      <div className="text-sm text-zinc-400">Engagement</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-4xl font-bold text-blue-400 mb-2">
-                        {stats.avgDurationMs > 0 ? formatDuration(stats.avgDurationMs) : '—'}
-                      </div>
-                      <div className="text-sm text-zinc-400">Avg. Session</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-4xl font-bold text-green-400 mb-2">{stats.totalCreators}</div>
-                      <div className="text-sm text-zinc-400">Creators</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-        {/* Pricing Section — beta */}
-        <section id="pricing" className="mb-16 md:mb-32">
-          <div className="text-center mb-10 md:mb-12">
-            <Badge className="mb-4 snap-badge">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Beta
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              Free While We
-              <br />
-              <span className="snap-gradient-text-static">
-                Build in Beta
-              </span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
-              Page creation is live in beta. Create, publish, and share — no credit card required.
-              Pricing plans will be introduced soon.
-            </p>
-          </div>
+              <Badge className="mb-8 snap-badge animate-fade-in-up">
+                Paste code · Get link · Go live
+              </Badge>
 
-          <div className="max-w-6xl mx-auto w-full px-0">
-            <Card className="snap-card w-full max-w-lg mx-auto border-cyan-500/30 shadow-lg shadow-cyan-500/10 py-0 gap-0">
-              <CardContent className="p-6 sm:p-8 md:p-10 text-center">
-                <h3 className="text-2xl font-semibold text-white mb-2">Beta Access</h3>
-                <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
-                  Everything you need to ship pages today — on us during early access.
-                </p>
-                <div className="text-4xl font-bold text-white mb-2">$0</div>
-                <p className="text-sm text-cyan-400 mb-8">Pricing coming soon</p>
-                <ul className="space-y-3 text-zinc-300 mb-8 text-left max-w-lg mx-auto w-full">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
-                    Create and publish pages during beta (3 per day)
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
-                    Live analytics on every page
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
-                    Public share links and optional PWA install
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-400 mr-2 shrink-0" />
-                    Early adopters get first look at paid plans
-                  </li>
-                </ul>
-                <div className="flex justify-center w-full">
+              <h1 className="snap-display text-[clamp(2.75rem,8vw,5.5rem)] mb-8 animate-fade-in-up delay-100">
+                Build &amp; share
+                <br />
+                <span className="snap-gradient-text">web pages</span>
+                <br />
+                <span className="text-zinc-500">instantly.</span>
+              </h1>
+
+              <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-lg leading-relaxed animate-fade-in-up delay-200">
+                Paste HTML, CSS &amp; JS. Get a public link with live analytics.
+                No deploy pipeline. No friction.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 mb-14 animate-fade-in-up delay-300">
                 <SignedOut>
                   <SignUpButton mode="modal">
-                    <Button size="lg" className="w-full min-w-[220px] sm:w-auto">
-                      Join Beta — Get Started <ArrowRight className="h-5 w-5" />
+                    <Button size="lg" className="snap-btn-shine">
+                      Start building <ArrowRight className="h-5 w-5" />
                     </Button>
                   </SignUpButton>
                 </SignedOut>
                 <SignedIn>
-                  <Button asChild size="lg" className="w-full min-w-[220px] sm:w-auto">
+                  <Button asChild size="lg" className="snap-btn-shine">
                     <Link href="/dashboard/new">
-                      Create a Page <ArrowRight className="h-5 w-5" />
+                      Create new page <ArrowRight className="h-5 w-5" />
                     </Link>
                   </Button>
                 </SignedIn>
-                </div>
-              </CardContent>
-            </Card>
+                <Button asChild variant="glass" size="lg">
+                  <Link href="#features">Explore features</Link>
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-10 animate-fade-in-up delay-400">
+                {[
+                  { value: stats.totalCreators, label: 'Creators' },
+                  { value: stats.totalPages, label: 'Pages live' },
+                  { value: formatCompact(stats.totalViews), label: 'Total views' },
+                ].map((stat) => (
+                  <div key={stat.label}>
+                    <div className="snap-stat-value text-3xl md:text-4xl">{stat.value}</div>
+                    <div className="text-xs uppercase tracking-[0.15em] text-zinc-600 mt-1">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dashboard preview */}
+            <ScrollReveal direction="left" delay={200} className="relative">
+              <div className="relative lg:perspective-[1200px]">
+                <div className="snap-glow" />
+                <Card className="relative snap-card overflow-hidden lg:[transform:rotateY(-4deg)_rotateX(2deg)] lg:transition-transform lg:duration-700 lg:hover:[transform:rotateY(-1deg)_rotateX(0.5deg)]">
+                  <CardContent className="p-0">
+                    <div className="border-b border-white/6 bg-white/3 px-5 py-3.5 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-teal-400/80" />
+                        </div>
+                        <span className="text-zinc-500 text-xs font-mono tracking-wide">
+                          snaplink — dashboard
+                        </span>
+                      </div>
+                      <Badge className="bg-teal-400/10 text-teal-300 border-teal-400/20 text-[10px] uppercase tracking-widest">
+                        Live
+                      </Badge>
+                    </div>
+                    <div className="p-5 sm:p-7">
+                      <div className="grid grid-cols-2 gap-3 mb-5">
+                        {[
+                          { label: 'Pages', value: stats.totalPages, growth: formatGrowth(stats.pagesGrowth), color: 'text-teal-400' },
+                          { label: 'Views', value: formatCompact(stats.totalViews), growth: formatGrowth(stats.viewsGrowth), color: 'text-violet-400' },
+                          { label: 'Engagement', value: `${stats.engagementRate}%`, growth: 'rate', color: 'text-rose-400' },
+                          { label: 'Avg. time', value: stats.avgDurationMs > 0 ? formatDuration(stats.avgDurationMs) : '—', growth: 'on page', color: 'text-amber-400' },
+                        ].map((m) => (
+                          <div key={m.label} className="rounded-xl border border-white/6 bg-white/2 p-4">
+                            <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2">{m.label}</div>
+                            <div className={`text-2xl font-display font-bold ${m.color}`}>{m.value}</div>
+                            <div className="text-[10px] text-zinc-600 mt-1">{m.growth}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="h-36 rounded-xl flex items-center justify-center border border-white/6 bg-gradient-to-br from-teal-400/5 via-violet-400/5 to-rose-400/5">
+                        <BarChart3 className="h-10 w-10 text-teal-400/60 animate-float" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </ScrollReveal>
           </div>
+        </section>
+
+        <Marquee
+          items={['Instant deploy', 'Live analytics', 'Zero config', 'Public links', 'PWA ready', 'Real-time stats']}
+          className="mb-20 md:mb-32"
+        />
+
+        {/* Features — bento grid */}
+        <section id="features" className="container mx-auto px-4 mb-20 md:mb-32">
+          <ScrollReveal className="mb-16 md:mb-20">
+            <SectionLabel index="01" label="Features" />
+            <h2 className="snap-display text-4xl md:text-6xl max-w-3xl">
+              Everything to ship
+              <span className="snap-gradient-text-static"> fast.</span>
+            </h2>
+            <p className="text-lg text-zinc-400 mt-6 max-w-xl">
+              Create, publish, and track — one platform, zero deploy headaches.
+            </p>
+          </ScrollReveal>
+
+          <div className="grid md:grid-cols-3 gap-4 md:gap-5 max-w-7xl mx-auto">
+            <ScrollReveal delay={0} className="md:col-span-2">
+              <SpotlightCard>
+                <Card className="snap-card snap-card-hover h-full border-teal-400/10">
+                  <CardContent className="p-8 md:p-10">
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 bg-teal-400/10 border border-teal-400/15">
+                      <Globe className="w-7 h-7 text-teal-400" />
+                    </div>
+                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">
+                      Instant global links
+                    </h3>
+                    <p className="text-zinc-400 text-lg leading-relaxed max-w-lg">
+                      Unique URLs for every page. Share anywhere — social, email, embeds.
+                      Fast loads worldwide.
+                    </p>
+                    <div className="flex items-center gap-2 mt-8 text-teal-400 text-sm font-medium">
+                      Learn more <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </SpotlightCard>
+            </ScrollReveal>
+
+            <ScrollReveal delay={100}>
+              <SpotlightCard>
+                <Card className="snap-card snap-card-hover h-full">
+                  <CardContent className="p-8">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-violet-400/10 border border-violet-400/15">
+                      <Zap className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-white mb-3">
+                      Zero deploy
+                    </h3>
+                    <p className="text-zinc-400 text-sm leading-relaxed">
+                      Paste code, hit publish. Live in seconds — no CI/CD required.
+                    </p>
+                  </CardContent>
+                </Card>
+              </SpotlightCard>
+            </ScrollReveal>
+
+            <ScrollReveal delay={150}>
+              <SpotlightCard>
+                <Card className="snap-card snap-card-hover h-full">
+                  <CardContent className="p-8">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-rose-400/10 border border-rose-400/15">
+                      <Layers className="w-6 h-6 text-rose-400" />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-white mb-3">
+                      Multi-mode editor
+                    </h3>
+                    <p className="text-zinc-400 text-sm leading-relaxed">
+                      Single HTML, separate editors, or file upload — your workflow.
+                    </p>
+                  </CardContent>
+                </Card>
+              </SpotlightCard>
+            </ScrollReveal>
+
+            <ScrollReveal delay={200} className="md:col-span-2">
+              <SpotlightCard>
+                <Card className="snap-card snap-card-hover h-full">
+                  <CardContent className="p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start">
+                    <div className="flex-1">
+                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-violet-400/10 border border-violet-400/15">
+                        <Code className="w-7 h-7 text-violet-400" />
+                      </div>
+                      <h3 className="font-display text-2xl font-bold text-white mb-3">
+                        Advanced code editor
+                      </h3>
+                      <p className="text-zinc-400 leading-relaxed">
+                        Separate HTML, CSS &amp; JS panels. Syntax-aware workflow built for developers.
+                      </p>
+                    </div>
+                    <div className="flex-1 w-full rounded-xl border border-white/6 bg-[var(--snap-bg)] p-4 font-mono text-xs text-zinc-500 leading-relaxed">
+                      <span className="text-violet-400">&lt;div</span> className=<span className="text-teal-400">&quot;hero&quot;</span><span className="text-violet-400">&gt;</span>
+                      <br />
+                      {'  '}<span className="text-zinc-600">{'// your page, your rules'}</span>
+                      <br />
+                      <span className="text-violet-400">&lt;/div&gt;</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </SpotlightCard>
+            </ScrollReveal>
+
+            <ScrollReveal delay={250} className="md:col-span-3">
+              <SpotlightCard>
+                <Card className="snap-card snap-card-hover">
+                  <CardContent className="p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-start gap-6">
+                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-400/10 border border-emerald-400/15">
+                        <Shield className="w-7 h-7 text-emerald-400" />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-2xl font-bold text-white mb-2">
+                          Enterprise-grade security
+                        </h3>
+                        <p className="text-zinc-400 max-w-xl">
+                          SSL everywhere. Public or private pages. Sanitized rendering. Your code, your control.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {['SSL', 'Private pages', 'Sanitized HTML', 'GDPR-ready'].map((tag) => (
+                        <span key={tag} className="px-3 py-1 rounded-full border border-white/8 bg-white/3 text-xs text-zinc-400">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </SpotlightCard>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* Analytics */}
+        <section className="container mx-auto px-4 mb-20 md:mb-32">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-7xl mx-auto">
+            <ScrollReveal>
+              <SectionLabel index="02" label="Analytics" />
+              <h2 className="snap-display text-4xl md:text-5xl mb-6">
+                Real data.
+                <br />
+                <span className="snap-gradient-text-static">Real impact.</span>
+              </h2>
+              <p className="text-lg text-zinc-400 mb-8 leading-relaxed">
+                Every view, bounce, and session tracked live. No mock charts. No placeholders.
+              </p>
+              <ul className="space-y-4">
+                {[
+                  'Real-time visitor tracking',
+                  'Bounce rate & session duration',
+                  'Custom event tracking',
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-zinc-300">
+                    <CheckCircle className="h-5 w-5 text-teal-400 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </ScrollReveal>
+
+            <ScrollReveal direction="left" delay={150}>
+              <div className="relative">
+                <div className="snap-glow" />
+                <Card className="relative snap-card">
+                  <CardContent className="p-8 md:p-10">
+                    <div className="grid grid-cols-2 gap-6">
+                      {[
+                        { value: stats.totalPages, label: 'Pages live', color: 'text-teal-400' },
+                        { value: `${stats.engagementRate}%`, label: 'Engagement', color: 'text-rose-400' },
+                        { value: stats.avgDurationMs > 0 ? formatDuration(stats.avgDurationMs) : '—', label: 'Avg. session', color: 'text-violet-400' },
+                        { value: stats.totalCreators, label: 'Creators', color: 'text-amber-400' },
+                      ].map((s) => (
+                        <div key={s.label} className="text-center p-4 rounded-xl border border-white/6 bg-white/2">
+                          <div className={`font-display text-3xl md:text-4xl font-bold mb-1 ${s.color}`}>
+                            {s.value}
+                          </div>
+                          <div className="text-xs uppercase tracking-widest text-zinc-600">{s.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section id="pricing" className="container mx-auto px-4 mb-20 md:mb-32">
+          <ScrollReveal className="text-center mb-12 md:mb-16">
+            <SectionLabel index="03" label="Pricing" className="justify-center" />
+            <Badge className="mb-6 snap-badge">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Beta
+            </Badge>
+            <h2 className="snap-display text-4xl md:text-6xl">
+              Free while we
+              <br />
+              <span className="snap-gradient-text-static">build in beta.</span>
+            </h2>
+            <p className="text-lg text-zinc-400 mt-6 max-w-xl mx-auto">
+              Create, publish, share — no credit card. Paid plans coming soon.
+            </p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={100} className="max-w-lg mx-auto">
+            <div className="snap-border-gradient">
+              <div className="snap-border-gradient-inner">
+                <Card className="border-0 bg-transparent shadow-none">
+                  <CardContent className="p-8 md:p-10 text-center">
+                    <h3 className="font-display text-2xl font-bold text-white mb-2">Beta access</h3>
+                    <p className="text-zinc-500 mb-8">Everything to ship pages today.</p>
+                    <div className="font-display text-6xl font-bold text-white mb-1">$0</div>
+                    <p className="text-sm text-teal-400 mb-8 uppercase tracking-widest">Pricing soon</p>
+                    <ul className="space-y-3 text-zinc-400 mb-10 text-left">
+                      {[
+                        'Create & publish pages (3/day)',
+                        'Live analytics on every page',
+                        'Public links + optional PWA',
+                        'Early access to paid plans',
+                      ].map((item) => (
+                        <li key={item} className="flex items-center gap-3">
+                          <CheckCircle className="h-4 w-4 text-teal-400 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <SignedOut>
+                      <SignUpButton mode="modal">
+                        <Button size="lg" className="w-full snap-btn-shine">
+                          Join beta <ArrowRight className="h-5 w-5" />
+                        </Button>
+                      </SignUpButton>
+                    </SignedOut>
+                    <SignedIn>
+                      <Button asChild size="lg" className="w-full snap-btn-shine">
+                        <Link href="/dashboard/new">
+                          Create a page <ArrowRight className="h-5 w-5" />
+                        </Link>
+                      </Button>
+                    </SignedIn>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </ScrollReveal>
         </section>
 
         {/* Platform metrics */}
-        <section className="mb-16 md:mb-32">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              Real Numbers,
-              <br />
-              <span className="snap-gradient-text-static">
-                Real Tracking
-              </span>
+        <section className="container mx-auto px-4 mb-20 md:mb-32">
+          <ScrollReveal className="text-center mb-12 md:mb-16">
+            <SectionLabel index="04" label="Platform" className="justify-center" />
+            <h2 className="snap-display text-4xl md:text-5xl">
+              Numbers that
+              <span className="snap-gradient-text-static"> matter.</span>
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto">
-              Every view, bounce, and session duration is recorded live — no mock data, no placeholders.
-            </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="snap-card snap-card-hover">
-              <CardContent className="p-8 text-center">
-                <Users className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
-                <div className="text-4xl font-bold text-white mb-2">{stats.totalCreators}</div>
-                <p className="text-zinc-400">Active creators on the platform</p>
-              </CardContent>
-            </Card>
-            <Card className="snap-card snap-card-hover">
-              <CardContent className="p-8 text-center">
-                <BarChart3 className="w-10 h-10 text-violet-400 mx-auto mb-4" />
-                <div className="text-4xl font-bold text-white mb-2">{stats.viewsThisMonth}</div>
-                <p className="text-zinc-400">Views recorded this month</p>
-              </CardContent>
-            </Card>
-            <Card className="snap-card snap-card-hover">
-              <CardContent className="p-8 text-center">
-                <Activity className="w-10 h-10 text-rose-400 mx-auto mb-4" />
-                <div className="text-4xl font-bold text-white mb-2">{stats.engagementRate}%</div>
-                <p className="text-zinc-400">Average engagement across all pages</p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            {[
+              { icon: Users, value: stats.totalCreators, label: 'Active creators', color: 'text-teal-400' },
+              { icon: BarChart3, value: stats.viewsThisMonth, label: 'Views this month', color: 'text-violet-400' },
+              { icon: Activity, value: `${stats.engagementRate}%`, label: 'Avg. engagement', color: 'text-rose-400' },
+            ].map((item, i) => (
+              <ScrollReveal key={item.label} delay={i * 100}>
+                <SpotlightCard>
+                  <Card className="snap-card snap-card-hover">
+                    <CardContent className="p-8 text-center">
+                      <item.icon className={`w-8 h-8 ${item.color} mx-auto mb-5`} />
+                      <div className="snap-stat-value text-4xl mb-2">{item.value}</div>
+                      <p className="text-sm text-zinc-500">{item.label}</p>
+                    </CardContent>
+                  </Card>
+                </SpotlightCard>
+              </ScrollReveal>
+            ))}
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="text-center py-12 md:py-20">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
-              Ready to Build Something
-              <br />
-              <span className="snap-gradient-text-static">
-                Amazing?
-              </span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-8 md:mb-12">
-              {stats.totalCreators > 0
-                ? `Join ${stats.totalCreators} creator${stats.totalCreators !== 1 ? 's' : ''} already publishing with Snaplink.`
-                : 'Be the first creator to publish with Snaplink.'}
-              {' '}Join the beta — free while we build.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <SignedOut>
-                <SignUpButton mode="modal">
-                  <Button size="lg">
-                    Join Beta <ArrowRight className="h-5 w-5" />
+        {/* CTA */}
+        <section className="container mx-auto px-4 pb-20 md:pb-32">
+          <ScrollReveal>
+            <div className="relative max-w-4xl mx-auto text-center rounded-3xl border border-white/8 bg-white/2 backdrop-blur-2xl px-8 py-16 md:py-24 overflow-hidden">
+              <div className="snap-hero-glow opacity-60" aria-hidden />
+              <h2 className="relative snap-display text-4xl md:text-6xl mb-6">
+                Ready to build
+                <br />
+                <span className="snap-gradient-text-static">something great?</span>
+              </h2>
+              <p className="relative text-lg text-zinc-400 mb-10 max-w-lg mx-auto">
+                {stats.totalCreators > 0
+                  ? `Join ${stats.totalCreators} creator${stats.totalCreators !== 1 ? 's' : ''} on Snaplink.`
+                  : 'Be the first creator on Snaplink.'}
+                {' '}Free during beta.
+              </p>
+              <div className="relative flex flex-col sm:flex-row gap-4 justify-center">
+                <SignedOut>
+                  <SignUpButton mode="modal">
+                    <Button size="lg" className="snap-btn-shine">
+                      Join beta <ArrowRight className="h-5 w-5" />
+                    </Button>
+                  </SignUpButton>
+                </SignedOut>
+                <SignedIn>
+                  <Button asChild size="lg" className="snap-btn-shine">
+                    <Link href="/dashboard/new">
+                      Create first page <ArrowRight className="h-5 w-5" />
+                    </Link>
                   </Button>
-                </SignUpButton>
-              </SignedOut>
-              <SignedIn>
-                <Button asChild size="lg">
-                  <Link href="/dashboard/new">
-                    Create Your First Page <ArrowRight className="h-5 w-5" />
-                  </Link>
+                </SignedIn>
+                <Button asChild variant="glass" size="lg">
+                  <Link href="#pricing">Beta &amp; pricing</Link>
                 </Button>
-              </SignedIn>
-              <Button asChild variant="glass" size="lg">
-                <Link href="#pricing">Beta &amp; Pricing</Link>
-              </Button>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/8 bg-white/3 backdrop-blur-xl animate-fade-in">
-        <div className="container mx-auto px-4 py-10 sm:py-16">
-          <div className="grid md:grid-cols-5 gap-8">
+      <footer className="border-t border-white/6 animate-fade-in">
+        <div className="container mx-auto px-4 py-12 sm:py-16">
+          <div className="grid md:grid-cols-5 gap-10">
             <div className="md:col-span-2">
-              <div className="text-2xl font-bold snap-gradient-text-static mb-4">
+              <div className="font-display text-2xl font-bold snap-gradient-text-static mb-4">
                 Snaplink
               </div>
-              <p className="text-zinc-400 mb-6 max-w-md">
-                The most powerful platform for building and sharing web pages instantly.
-                {stats.totalViews.toLocaleString()} views tracked across {stats.totalPages} live pages.
+              <p className="text-zinc-500 mb-6 max-w-sm text-sm leading-relaxed">
+                Build and share web pages instantly.
+                {stats.totalViews.toLocaleString()} views across {stats.totalPages} live pages.
               </p>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 hover:border-cyan-500/40 hover:bg-white/10 cursor-pointer transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold">X</span>
-                </div>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 hover:border-cyan-500/40 hover:bg-white/10 cursor-pointer transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold">LI</span>
-                </div>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 hover:border-cyan-500/40 hover:bg-white/10 cursor-pointer transition-all duration-300 hover:scale-110">
-                  <span className="text-sm font-bold">GH</span>
-                </div>
+              <div className="flex gap-3">
+                {['X', 'LI', 'GH'].map((s) => (
+                  <div
+                    key={s}
+                    className="w-9 h-9 rounded-lg flex items-center justify-center border border-white/8 bg-white/3 text-zinc-500 text-xs font-bold hover:border-teal-400/30 hover:text-teal-400 transition-all duration-300 cursor-pointer"
+                  >
+                    {s}
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div>
-              <h4 className="font-semibold text-white mb-4">Product</h4>
-              <ul className="space-y-3 text-zinc-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-cyan-400 transition-colors">Beta &amp; Pricing</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Templates</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Integrations</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-white mb-4">Resources</h4>
-              <ul className="space-y-3 text-zinc-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Community</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-3 text-zinc-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Terms</a></li>
-              </ul>
-            </div>
+            {[
+              { title: 'Product', links: ['Features', 'Beta & Pricing', 'Templates', 'Integrations'] },
+              { title: 'Resources', links: ['Documentation', 'Help Center', 'Community', 'Blog'] },
+              { title: 'Company', links: ['About', 'Careers', 'Privacy', 'Terms'] },
+            ].map((col) => (
+              <div key={col.title}>
+                <h4 className="font-display text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+                  {col.title}
+                </h4>
+                <ul className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link}>
+                      <a href="#" className="text-sm text-zinc-500 hover:text-teal-400 transition-colors">
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
-          <div className="border-t border-white/8 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-zinc-400 text-sm">
-              © 2026 Snaplink. All rights reserved.
-            </p>
-            <p className="text-zinc-400 text-sm mt-4 md:mt-0">
-              Made with ❤️ for developers worldwide
-            </p>
+          <div className="border-t border-white/6 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-zinc-600 text-xs">© 2026 Snaplink. All rights reserved.</p>
+            <p className="text-zinc-600 text-xs">Made for developers worldwide</p>
           </div>
         </div>
       </footer>
